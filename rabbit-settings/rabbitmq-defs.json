@@ -1,0 +1,57 @@
+{
+  "vhosts":[
+    {"name": "/"}
+  ],
+  "users": [
+    {
+      "name": "guest",
+      "password": "guest",
+      "tags": ["administrator"]
+    }
+  ],
+  "permissions":[
+    {
+      "user":"guest",
+      "vhost":"/",
+      "configure":".*",
+      "read":".*",
+      "write":".*"}
+  ],
+  "exchanges": [
+    {
+      "name": "vacancy.announcer",
+      "vhost":"/",
+      "type": "direct",
+      "durable": true,
+      "auto_delete": false,
+      "internal": false,
+      "arguments": {}
+    }
+  ],
+  "queues": [
+    {
+      "name": "announcer.telegram",
+      "vhost":"/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    },
+    {
+      "name": "vacancies.new",
+      "vhost":"/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {}
+    }
+  ],
+  "bindings": [
+    {
+      "vhost":"/",
+      "source": "vacancy.announcer",
+      "destination": "announcer.telegram",
+      "destination_type": "queue",
+      "routing_key": "telegram",
+      "arguments": {}
+    }
+  ]
+}

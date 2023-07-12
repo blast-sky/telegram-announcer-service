@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  telegram-announcer-service:
+    image: 'telegram-announcer-service'
+    build:
+      context: .
+    container_name: telegram-announcer-service
+    depends_on:
+      - rabbit
+    environment:
+      - TELEGRAM_BOT_TOKEN
+      - RABBIT_HOST=rabbit
+
+  rabbit:
+    image: 'rabbitmq:3-management'
+    container_name: rabbit
+    ports:
+      - '15672:15672'
+    volumes:
+      - type: bind
+        source: ./rabbit-settings/rabbitmq.config
+        target: /etc/rabbitmq/rabbitmq.config
+      - type: bind
+        source: ./rabbit-settings/rabbitmq-defs.json
+        target: /etc/rabbitmq/rabbitmq-defs.json
