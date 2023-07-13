@@ -10,6 +10,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 import rabbit
 from handlers import router
+from src.message_converter import convert_to_markdown, create_keyboard_markup
 
 
 async def main():
@@ -21,10 +22,14 @@ async def main():
 
     async def on_message(message: AbstractIncomingMessage) -> None:
         json_body = json.loads(message.body)
-        await bot.send_message(json_body["userInfo"], str(json_body))
+
+        user_id = json_body["userInfo"]
+        vacancy = json_body["vacancy"]
+
+        keyboard = create_keyboard_markup(vacancy)
+        await bot.send_message(user_id, convert_to_markdown(vacancy), reply_markup=keyboard)
 
     asyncio.create_task(rabbit.listen_for_new_vacancy(on_message))
-    # await bot.delete_webhook(drop_pending_updates=True)
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 
