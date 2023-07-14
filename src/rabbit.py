@@ -12,7 +12,7 @@ async def listen_for_new_vacancy(callback: Callable[[AbstractIncomingMessage], A
     connection = await connect(f"amqp://guest:guest@{RABBIT_HOST}")
     async with connection:
         channel = await connection.channel()
-        queue = await channel.get_queue("announcer.telegram")
+        queue = await channel.get_queue("hhsva.service.announcer.telegram")
 
-        await queue.consume(callback, no_ack=True)
+        await queue.consume(callback, no_ack=False)
         await asyncio.Future()
