@@ -10,7 +10,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 import rabbit
 from handlers import router
-from src.message_converter import convert_to_markdown, create_keyboard_markup
+from message_converter import convert_to_markdown, create_keyboard_markup
 
 
 async def main():
