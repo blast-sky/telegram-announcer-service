@@ -1,12 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import logging
 
 import aiohttp
-
-from aiogram import types, F, Router
-from aiogram.types import Message
+from aiogram import Router
 from aiogram.filters import Command
+from aiogram.types import Message
 
 from constants import CREATE_URL, GET_URL, REMOVE_URL
 
@@ -34,7 +32,7 @@ async def subscribe_handler(msg: Message):
     }
 
     async with aiohttp.ClientSession() as session:
-        response = await session.post(CREATE_URL, json=create_subscription_json)
+        response = await session.post(CREATE_URL, json=create_subscription_json, verify_ssl=False)
         if response:
             return await msg.answer("Подписка успешно оформлена. Чтобы посмотреть активные подписки: /subscriptions")
         else:
@@ -44,9 +42,13 @@ async def subscribe_handler(msg: Message):
 @router.message(Command("subscriptions"))
 async def subscriptions_handler(msg: Message):
     async with aiohttp.ClientSession() as session:
-        response = await session.get(GET_URL.format(user_id=msg.from_user.id))
+        response = await session.get(GET_URL.format(user_id=msg.from_user.id), verify_ssl=False)
         if response:
-            return await msg.answer(f"Ваши активные подписки:\n${response.content}")
+            json = await response.json()
+            subscriptions_text = str()
+            for subscription in json:
+                subscriptions_text += f"\n- {subscription['subscriptionType']}: {' '.join(subscription['filters'])}"
+            return await msg.answer(f"Ваши активные подписки:{subscriptions_text}")
         else:
             return await msg.answer("Ошибка при обращении к сервису.")
 
@@ -54,7 +56,7 @@ async def subscriptions_handler(msg: Message):
 @router.message(Command("remove"))
 async def subscriptions_handler(msg: Message):
     async with aiohttp.ClientSession() as session:
-        response = await session.get(REMOVE_URL.format(user_id=msg.from_user.id))
+        response = await session.get(REMOVE_URL.format(user_id=msg.from_user.id), verify_ssl=False)
         if response:
             return await msg.answer(f"Подписки успешно удалены.")
         else:
