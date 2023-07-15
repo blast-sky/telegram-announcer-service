@@ -10,9 +10,6 @@ def convert_to_markdown(vacancy: dict) -> str:
     if vacancy.get("name"):
         markdown += f"\n**Название:** {vacancy['name']}"
 
-    if vacancy.get("url"):
-        markdown += f"\n**URL:** {vacancy['url']}"
-
     if vacancy.get("published_at"):
         markdown += f"\n**Опубликовано:** {vacancy['published_at']}"
 
