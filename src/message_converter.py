@@ -40,7 +40,9 @@ def convert_to_markdown(vacancy: dict) -> str:
 
 def create_keyboard_markup(vacancy: dict) -> InlineKeyboardMarkup:
     buttons_rows = list()
-    buttons_rows += [InlineKeyboardButton(text="Ссылка", url=vacancy["url"])]
+    buttons_rows += []
+    keyboard = InlineKeyboardMarkup()
+    keyboard.inline_keyboard = [[InlineKeyboardButton(text="Ссылка", url=vacancy["url"])]]
     if vacancy.get("alternate_url"):
-        buttons_rows += [InlineKeyboardButton(text="Альтернативная ссылка", url=vacancy["alternate_url"])]
-    return InlineKeyboardMarkup(buttons_rows)
+        keyboard.inline_keyboard += [InlineKeyboardButton(text="Альтернативная ссылка", url=vacancy["alternate_url"])]
+    return keyboard
