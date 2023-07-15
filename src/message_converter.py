@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
 def convert_to_markdown(vacancy: dict) -> str:
@@ -39,10 +40,8 @@ def convert_to_markdown(vacancy: dict) -> str:
 
 
 def create_keyboard_markup(vacancy: dict) -> InlineKeyboardMarkup:
-    buttons_rows = list()
-    buttons_rows += []
-    keyboard = InlineKeyboardMarkup()
-    keyboard.inline_keyboard = [[InlineKeyboardButton(text="Ссылка", url=vacancy["url"])]]
+    keyboard = InlineKeyboardBuilder()
+    keyboard.button(InlineKeyboardButton(text="Ссылка", url=vacancy["url"]))
     if vacancy.get("alternate_url"):
-        keyboard.inline_keyboard += [InlineKeyboardButton(text="Альтернативная ссылка", url=vacancy["alternate_url"])]
-    return keyboard
+        keyboard.button(InlineKeyboardButton(text="Альтернативная ссылка", url=vacancy["alternate_url"]))
+    return keyboard.as_markup()
