@@ -27,7 +27,7 @@ async def main():
         vacancy = json_body["vacancy"]
 
         keyboard = create_keyboard_markup(vacancy)
-        await bot.send_message(user_id, convert_to_markdown(vacancy), reply_markup=keyboard)
+        await bot.send_message(user_id, convert_to_markdown(vacancy), reply_markup=keyboard, parse_mode="markdown")
 
     asyncio.create_task(rabbit.listen_for_new_vacancy(on_message))
     await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
