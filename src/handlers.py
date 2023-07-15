@@ -56,7 +56,7 @@ async def subscriptions_handler(msg: Message):
 @router.message(Command("remove"))
 async def subscriptions_handler(msg: Message):
     async with aiohttp.ClientSession() as session:
-        response = await session.get(REMOVE_URL.format(user_id=msg.from_user.id), verify_ssl=False)
+        response = await session.delete(REMOVE_URL.format(user_id=msg.from_user.id), verify_ssl=False)
         if response:
             return await msg.answer(f"Подписки успешно удалены.")
         else:
